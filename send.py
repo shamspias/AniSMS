@@ -5,10 +5,10 @@ import os
 import telnyx
 
 class AniSMS:
-    my_telnyx_number = "+18554834088"
-    destination_number = "+16075480176"
-    message_title = "Ani Test"
-    message_text = "Hi It's check"
+    my_telnyx_number = "My Number"
+    destination_number = "Number Want to Send"
+    message_title = "Message Title"
+    message_text = "Message Text"
 
     def send_sms(self, my_api_key):
         telnyx.api_key = my_api_key
@@ -23,8 +23,9 @@ class AniSMS:
 # Get multiple api
 file_handle_api_keys = open('api_list.txt', 'r')
 api_key_list = file_handle_api_keys.readlines()
-api_key_cnt = 0
-my_api_key = api_key_list[api_key_cnt]
+api_key_cnt = 1
+my_api_key = api_key_list[0]
+
 
 # Get multiple sender numbers
 file_handle_sender_numbers = open('sender_number.txt', 'r')
@@ -34,15 +35,23 @@ sender_numbers_list = file_handle_sender_numbers.readlines()
 file_handle_numbers = open('numbers.txt', 'r')
 number_list = file_handle_numbers.readlines()
 cnt = 0
-limit = 6
+
+sms_limit = int(input("How many SMS can you send?: "))
+limit = sms_limit
+
 ani_sms = AniSMS()
+ani_sms.my_telnyx_number = sender_numbers_list[0]
+
+my_message_text = input("Enter Your SMS: ") # MGS want to send
+
+ani_sms.message_text = my_message_text
 
 for i in number_list:
     print("Works Before send ",i)
     cnt += 1
     ani_sms.destination_number = i
     if cnt > limit:
-        limit += 10
+        limit += sms_limit
         api_key_cnt += 1
 
         # because api key connected with sender number
