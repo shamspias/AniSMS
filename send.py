@@ -65,6 +65,7 @@ for i in number_list:
     
     ani_sms.destination_number = i
     if cnt >= limit:
+        print("Change API & Number")
         limit += sms_limit
         # because api key connected with sender number
         ani_sms.my_telnyx_number = sender_numbers_list[api_key_cnt][:-1]
