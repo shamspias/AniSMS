@@ -46,7 +46,8 @@ file_handle_numbers = open('numbers.txt', 'r')
 number_list = file_handle_numbers.readlines()
 cnt = 0
 
-sms_limit = int(input("How many SMS can you send?: "))
+sms_limit = int(input("Enter API Switching:  "))
+sms_limit = sms_limit - 1
 limit = sms_limit
 
 ani_sms = AniSMS()
