@@ -70,7 +70,7 @@ for i in number_list:
         ani_sms.my_telnyx_number = sender_numbers_list[api_key_cnt][:-1]
         my_api_key = api_key_list[api_key_cnt][:-1]
         api_key_cnt += 1
-        cnt += 1
+        cnt = 0
 
     for k in range(len_api_list):
         if ani_sms.send_sms(my_api_key):
