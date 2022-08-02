@@ -12,6 +12,8 @@ class AniSMS:
 
     def send_sms(self, my_api_key):
         telnyx.api_key = my_api_key
+        # print("My Sender Number is: ", self.my_telnyx_number)              
+        # print("My API Key is: ", my_api_key)              
         # return telnyx.Message.create(
         #     from_=self.my_telnyx_number,
         #     to=self.destination_number,
@@ -33,7 +35,7 @@ file_handle_api_keys = open('api_list.txt', 'r')
 api_key_list = file_handle_api_keys.readlines()
 api_key_cnt = 1
 my_api_key = api_key_list[0]
-my_api_key = my_api_key[:-1]
+my_api_key = my_api_key.rstrip()
 len_api_list = len(api_key_list) - 1
 
 
@@ -51,38 +53,43 @@ sms_limit = sms_limit
 limit = sms_limit
 
 ani_sms = AniSMS()
-ani_sms.my_telnyx_number = sender_numbers_list[0][:-1]
+ani_sms.my_telnyx_number = sender_numbers_list[0].rstrip()
 
 my_message_text = input("Enter Your SMS: ") # MGS want to send
 
 ani_sms.message_text = my_message_text
 
 for i in number_list:
-    if api_key_cnt == len_api_list:
-        api_key_cnt = 0
 
-    print("Works Before send ",i)
+    print("Sending SMS TO: ",i)
     
     ani_sms.destination_number = i
+
     if cnt >= limit:
         print("Change API & Number")
         limit += sms_limit
         # because api key connected with sender number
-        ani_sms.my_telnyx_number = sender_numbers_list[api_key_cnt][:-1]
-        my_api_key = api_key_list[api_key_cnt][:-1]
+        if api_key_cnt > len_api_list:
+            print("Change back to 1st API again")
+            api_key_cnt = 0
+        ani_sms.my_telnyx_number = sender_numbers_list[api_key_cnt].rstrip()
+        my_api_key = api_key_list[api_key_cnt].rstrip()
         api_key_cnt += 1
     cnt += 1
+    
 
-    for k in range(len_api_list):
+    for k in range(len_api_list*2):
         if ani_sms.send_sms(my_api_key):
             print("Send Successful")
             break
+
         else:
             print("Faild")
             print("Changing API & Number")
-            limit += sms_limit
+            if api_key_cnt > len_api_list:
+                print("Changing back to 1st API again")
+                api_key_cnt = 0
             # because api key connected with sender number
-            ani_sms.my_telnyx_number = sender_numbers_list[api_key_cnt][:-1]
-            my_api_key = api_key_list[api_key_cnt][:-1]
+            ani_sms.my_telnyx_number = sender_numbers_list[api_key_cnt].rstrip()
+            my_api_key = api_key_list[api_key_cnt].rstrip()
             api_key_cnt += 1
-        
