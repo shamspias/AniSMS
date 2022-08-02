@@ -46,8 +46,8 @@ file_handle_numbers = open('numbers.txt', 'r')
 number_list = file_handle_numbers.readlines()
 cnt = 0
 
-sms_limit = int(input("Enter API Switching:  "))
-sms_limit = sms_limit - 1
+sms_limit = int(input("Enter number of SMS for Each API: "))
+sms_limit = sms_limit
 limit = sms_limit
 
 ani_sms = AniSMS()
@@ -63,15 +63,14 @@ for i in number_list:
 
     print("Works Before send ",i)
     
-    cnt += 1
     ani_sms.destination_number = i
-    if cnt > limit:
+    if cnt >= limit:
         limit += sms_limit
         # because api key connected with sender number
         ani_sms.my_telnyx_number = sender_numbers_list[api_key_cnt][:-1]
         my_api_key = api_key_list[api_key_cnt][:-1]
         api_key_cnt += 1
-        cnt = 0
+    cnt += 1
 
     for k in range(len_api_list):
         if ani_sms.send_sms(my_api_key):
