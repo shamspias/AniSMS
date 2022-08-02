@@ -25,6 +25,7 @@ file_handle_api_keys = open('api_list.txt', 'r')
 api_key_list = file_handle_api_keys.readlines()
 api_key_cnt = 1
 my_api_key = api_key_list[0]
+len_api_list = len(api_key_list) - 1
 
 
 # Get multiple sender numbers
@@ -47,6 +48,9 @@ my_message_text = input("Enter Your SMS: ") # MGS want to send
 ani_sms.message_text = my_message_text
 
 for i in number_list:
+    if api_key_cnt == len_api_list:
+        api_key_cnt = 0
+        
     print("Works Before send ",i)
     cnt += 1
     ani_sms.destination_number = i
