@@ -12,11 +12,19 @@ class AniSMS:
 
     def send_sms(self, my_api_key):
         telnyx.api_key = my_api_key
-        return telnyx.Message.create(
-            from_=self.my_telnyx_number,
-            to=self.destination_number,
-            text=self.message_text,
-            )
+        # return telnyx.Message.create(
+        #     from_=self.my_telnyx_number,
+        #     to=self.destination_number,
+        #     text=self.message_text,
+        #     )
+        try:
+            return telnyx.Message.create(
+                from_=self.my_telnyx_number,
+                to=self.destination_number,
+                text=self.message_text,
+                )
+        except:
+            return False
 
 # my_api_key = os.environ.get("TELNYX_SECRET_KEY")
 
@@ -42,7 +50,7 @@ sms_limit = int(input("How many SMS can you send?: "))
 limit = sms_limit
 
 ani_sms = AniSMS()
-ani_sms.my_telnyx_number = sender_numbers_list[0]
+ani_sms.my_telnyx_number = sender_numbers_list[0][:-1]
 
 my_message_text = input("Enter Your SMS: ") # MGS want to send
 
@@ -53,16 +61,25 @@ for i in number_list:
         api_key_cnt = 0
 
     print("Works Before send ",i)
+    
     cnt += 1
     ani_sms.destination_number = i
     if cnt > limit:
         limit += sms_limit
+        # because api key connected with sender number
+        ani_sms.my_telnyx_number = sender_numbers_list[api_key_cnt][:-1]
+        my_api_key = api_key_list[api_key_cnt][:-1]
         api_key_cnt += 1
 
-        # because api key connected with sender number
-        ani_sms.my_telnyx_number = sender_numbers_list[api_key_cnt] 
-        my_api_key = api_key_list[api_key_cnt]
+    for k in range(len_api_list):
+        if ani_sms.send_sms(my_api_key):
+            print("Send Successful")
+            break
+        else:
+            print("Faild")
+            limit += sms_limit
+            # because api key connected with sender number
+            ani_sms.my_telnyx_number = sender_numbers_list[api_key_cnt][:-1]
+            my_api_key = api_key_list[api_key_cnt][:-1]
+            api_key_cnt += 1
         
-    if ani_sms.send_sms(my_api_key):
-        print("Send Successful")
-    
