@@ -79,6 +79,7 @@ for i in number_list:
             break
         else:
             print("Faild")
+            print("Changing API & Number")
             limit += sms_limit
             # because api key connected with sender number
             ani_sms.my_telnyx_number = sender_numbers_list[api_key_cnt][:-1]
